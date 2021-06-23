@@ -1,5 +1,5 @@
 {
-  "short_name": "Regleri",
+  "short_name": "Inmold regleri",
   "name": "Inmold Regleri",
   "icons": [
     {
@@ -8,12 +8,12 @@
       "type": "image/x-icon"
     },
     {
-      "src": "logo192.png",
+      "src": "inmold-favicon.ico",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "logo512.png",
+      "src": "inmold-favicon.ico",
       "type": "image/png",
       "sizes": "512x512"
     }
