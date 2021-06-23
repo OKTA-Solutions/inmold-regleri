@@ -11,7 +11,6 @@ function App() {
   return (
     <div className="container-fluid">
       <ToastContainer autoClose={2000} hideProgressBar />
-
       <Switch>
         <Route path="/" exact component={Login} />
         <ProtectedRoute path="/reglerilist" exact component={RegleriList} />
