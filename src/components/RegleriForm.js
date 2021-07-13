@@ -4,6 +4,7 @@ import Zastoji from "./Zastoji";
 import Smena from "./Smena";
 import Masine from "./Masine";
 import Alati from "./Alati";
+import Kupci from "./Kupci";
 import TrajanjeOd from "./TrajanjeOd";
 import TrajanjeDo from "./TrajanjeDo";
 import { httpget, httpost } from "../api/httpHelper";
@@ -16,6 +17,7 @@ function RegleriForm(props) {
   const [zastoj, setZastoj] = useState([]);
   const [masine, setMasine] = useState([]);
   const [alati, setAlati] = useState([]);
+  const [kupci, setKupci] = useState([]);
   const [trajanjeOd, setTrajanjeOd] = useState(new Date());
   const [trajanjeDo, setTrajanjeDo] = useState(new Date());
 
@@ -29,9 +31,9 @@ function RegleriForm(props) {
       if (responseMasina.data !== null) {
         setMasine(responseMasina.data);
       }
-      var responseAlati = await httpget("vrati_alate_cmb");
-      if (responseAlati.data !== null) {
-        setAlati(responseAlati.data);
+      var responseKupci = await httpget("vrati_kupce_za_reglere_cmb");
+      if (responseKupci.data !== null) {
+        setKupci(responseKupci.data);
       }
     })();
   }, []);
@@ -41,6 +43,17 @@ function RegleriForm(props) {
     // proveriti da li je dobra ova funkcija, videti kako slati posle na save
   }
 
+  function handleChangeKupac({ target }) {
+    (async () => {
+      var RegleriModel = {
+        id_partnera: parseInt(target.value),
+      };
+      var responseAlati = await httpost("vrati_alate_cmb", RegleriModel);
+      if (responseAlati.data !== null) {
+        setAlati(responseAlati.data);
+      }
+    })();
+  }
   function handleChangeOd(date) {
     setTrajanjeOd(date);
   }
@@ -82,6 +95,8 @@ function RegleriForm(props) {
       <div className="form-group">
         <label htmlFor="username">Mašina:</label>
         <Masine masine={masine} onChange={handleChange} />
+        <label htmlFor="username">Kupac:</label>
+        <Kupci kupci={kupci} onChange={handleChangeKupac} />
         <label htmlFor="password">Alat:</label>
         <Alati alati={alati} onChange={handleChange} />
         <label htmlFor="password">Zastoj:</label>
