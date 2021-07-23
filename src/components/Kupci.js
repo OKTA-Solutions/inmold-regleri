@@ -8,6 +8,7 @@ export default function Kupci(props) {
         className="form-control"
         name="kupci"
         onChange={props.onChange}
+        value={props.kupac}
       >
         {props.kupci.map((kupac) => {
           return (

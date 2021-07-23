@@ -8,6 +8,7 @@ export default function Alati(props) {
         className="form-control"
         name="alati"
         onChange={props.onChange}
+        value={props.alat}
       >
         {props.alati.map((alat) => {
           return (

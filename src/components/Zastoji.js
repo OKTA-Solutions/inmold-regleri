@@ -8,12 +8,12 @@ function Zastoji(props) {
         className="form-control"
         name="zastoj"
         onChange={props.onChange}
-        value={props.zastoj.id_zastoja}
+        value={props.zastoj}
       >
-        {props.zastoj.map((z) => {
+        {props.zastoji.map((z) => {
           return (
             <option key={z.id_zastoja} value={z.id_zastoja}>
-              {z.naziv_tipa_zastoja}
+              {z.sifra_prikaz}
             </option>
           );
         })}

@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { login_auth } from "../api/httpHelper";
 import cookie from "react-cookies";
+import Backdrop from "@material-ui/core/Backdrop";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 const Login = (props) => {
   const [showingAlert, setShowingAlert] = useState(false);
@@ -10,6 +12,7 @@ const Login = (props) => {
     username: "",
     password: "",
   });
+  const [loading, setLoading] = useState(false);
 
   function handleChange({ target }) {
     setLoginData({
@@ -33,6 +36,7 @@ const Login = (props) => {
     }
     event.preventDefault();
     (async () => {
+      setLoading(true);
       var UserModel = {
         Username: loginData.username,
         Password: loginData.password,
@@ -42,6 +46,7 @@ const Login = (props) => {
       if (response.data.token !== "") {
         const getAccessToken = () => cookie.load("jwtToken");
         if (!!getAccessToken()) {
+          setLoading(false);
           props.history.push("/reglerilist");
         }
       } else {
@@ -62,6 +67,9 @@ const Login = (props) => {
 
   return (
     <div style={{ paddingTop: "100px" }}>
+      <Backdrop style={{ zIndex: 9999, color: "#fe661d" }} open={loading}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <div style={{ display: "flex", justifyContent: "center" }}>
         <h2 style={{ fontFamily: "revert", color: "#fe661d" }}>Login</h2>
       </div>

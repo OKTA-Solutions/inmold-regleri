@@ -7,7 +7,7 @@ function Smena(props) {
         id="smena"
         className="form-control"
         name="smena"
-        //value={zastoji.smena}
+        value={props.value}
         onChange={props.onChange}
       >
         <option value="1">Prva smena</option>

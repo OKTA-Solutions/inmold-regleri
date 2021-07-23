@@ -8,6 +8,7 @@ export default function Masine(props) {
         className="form-control"
         name="masine"
         onChange={props.onChange}
+        value={props.masina}
       >
         {props.masine.map((masina) => {
           return (
