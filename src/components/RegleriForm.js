@@ -34,7 +34,12 @@ function RegleriForm(props) {
   const [masine, setMasine] = useState([]);
   const [alati, setAlati] = useState([]);
   const [kupci, setKupci] = useState([]);
-  const [pozicije, setPozicije] = useState([]);
+  const [pozicije, setPozicije] = useState([
+    {
+      id_pozicije1: 0,
+      naziv: "",
+    },
+  ]);
   const [id_partnera, setIdPartnera] = useState(0);
   const [agregat, setAgregat] = useState("ne");
   const [dizna, setDizna] = useState("ne");
@@ -143,8 +148,8 @@ function RegleriForm(props) {
       var responsePozicije = await httpost("vrati_pozicije", RegleriModel);
       if (responsePozicije.data !== null) {
         setPozicije(responsePozicije.data);
-        setIdPozicije1(responsePozicije.data[0].id_artikla);
-        setIdPozicije2(responsePozicije.data[0].id_artikla);
+        setIdPozicije1(0);
+        setIdPozicije2(0);
       }
     })();
   };

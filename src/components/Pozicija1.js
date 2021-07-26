@@ -10,6 +10,7 @@ export default function Pozicija1(props) {
         onChange={props.onChange}
         value={props.pozicija}
       >
+        <option selected value={0}></option>
         {props.pozicije.map((pozicija) => {
           return (
             <option key={pozicija.id_artikla} value={pozicija.id_artikla}>
