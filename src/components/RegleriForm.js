@@ -385,6 +385,23 @@ function RegleriForm(props) {
         <CircularProgress color="inherit" />
       </Backdrop>
       <div className="form-group">
+         <label>Datum:</label>
+        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+          <KeyboardDatePicker
+            className="form-control"
+            margin="normal"
+            id="date-picker-dialog"
+            format="dd/MM/yyyy"
+            value={zastoji.datum}
+            onChange={handleChangeDatum}
+            KeyboardButtonProps={{
+              "aria-label": "change date",
+            }}
+            style={{ marginTop: "-6px" }}
+          />
+        </MuiPickersUtilsProvider>
+        <label>Smena:</label>
+        <Smena onChange={handleChange} value={zastoji.smena} />
         <label>Mašina:</label>
         <Masine
           masine={masine}
@@ -421,8 +438,16 @@ function RegleriForm(props) {
           zastoj={zastoji.id_zastoja}
           onChange={handleChangeZastoj}
         />
-        <label>Smena:</label>
-        <Smena onChange={handleChange} value={zastoji.smena} />
+         <label>Trajanje:</label>
+        <input
+          id="trajanje"
+          type="number"
+          className="form-control"
+          name="trajanje"
+          value={zastoji.trajanje}
+          placeholder="u minutima"
+          onChange={handleChange}
+        />
         <label style={{ marginTop: "5px" }}>Pročišćavanje agregata:</label>
         &nbsp;&nbsp;&nbsp;
         <input
@@ -468,31 +493,6 @@ function RegleriForm(props) {
           name="pogace"
           placeholder="u kilogramima"
           value={zastoji.pogace}
-          onChange={handleChange}
-        />
-         <label>Datum:</label>
-        <MuiPickersUtilsProvider utils={DateFnsUtils}>
-          <KeyboardDatePicker
-            className="form-control"
-            margin="normal"
-            id="date-picker-dialog"
-            format="dd/MM/yyyy"
-            value={zastoji.datum}
-            onChange={handleChangeDatum}
-            KeyboardButtonProps={{
-              "aria-label": "change date",
-            }}
-            style={{ marginTop: "-6px" }}
-          />
-        </MuiPickersUtilsProvider>
-         <label>Trajanje:</label>
-        <input
-          id="trajanje"
-          type="number"
-          className="form-control"
-          name="trajanje"
-          value={zastoji.trajanje}
-          placeholder="u minutima"
           onChange={handleChange}
         />
         <label>Komentar:</label>

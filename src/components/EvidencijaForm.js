@@ -7,6 +7,8 @@ import Masine from "./Masine";
 import Alati from "./Alati";
 import Kupci from "./Kupci";
 import Smena from "./Smena";
+import Pozicija1 from "./Pozicija1";
+import Pozicija2 from "./Pozicija2";
 import formatDate from "./formatDate";
 import DateFnsUtils from "@date-io/date-fns";
 import {
@@ -24,12 +26,23 @@ export default function EvidencijaForm(props) {
     id_masine: 0,
     id_alata: 0,
     id_partnera: 0,
+    id_pozicije1: 0,
+    id_pozicije2: 0,
   });
   const [masine, setMasine] = useState([]);
   const [kupci, setKupci] = useState([]);
   const [alati, setAlati] = useState([]);
   const [loading, setLoading] = useState(false);
   const [id_alata, setIdAlata] = useState(0);
+  const [id_partnera, setIdPartnera] = useState(0);
+  const [pozicije, setPozicije] = useState([
+    {
+      id_pozicije1: 0,
+      naziv: "",
+    },
+  ]);
+  const [id_pozicije1, setIdPozicije1] = useState(0);
+  const [id_pozicije2, setIdPozicije2] = useState(0);
 
   useEffect(() => {
     setLoading(true);
@@ -45,6 +58,7 @@ export default function EvidencijaForm(props) {
       setLoading(false);
     })();
     const params = props.location.state;
+    debugger;
     if (params !== 1 && params !== 2 && params !== 3 && params !== undefined) {
       (async () => {
         var RegleriModel = {
@@ -54,14 +68,26 @@ export default function EvidencijaForm(props) {
         if (responseAlati.data !== null) {
           setAlati(responseAlati.data);
         }
+        RegleriModel = {
+          id_partnera: parseInt(params.id_partnera),
+          id_alata: parseInt(params.id_alata),
+        };
+        var responsePozicije = await httpost("vrati_pozicije", RegleriModel);
+        if (responsePozicije.data !== null) {
+          setPozicije(responsePozicije.data);
+        }
       })();
       setEvidencija(params);
+      setIdPartnera(params.id_partnera);
       setIdAlata(params.id_alata);
+      setIdPozicije1(params.id_pozicije1);
+      setIdPozicije2(params.id_pozicije2);
     }
   }, [props.location.state]);
 
   function handleChangeKupac({ target }) {
     setEvidencija({ ...evidencija, id_partnera: target.value });
+    setIdPartnera(target.value);
     ucitajAlate(target.value);
   }
 
@@ -74,6 +100,10 @@ export default function EvidencijaForm(props) {
       if (responseAlati.data !== null) {
         setAlati(responseAlati.data); // upunjavam alate
         setIdAlata(responseAlati.data[0].id_alata);
+        ucitajPozicije(
+          parseInt(id_partnera),
+          parseInt(responseAlati.data[0].id_alata)
+        );
       }
     })();
   };
@@ -92,6 +122,31 @@ export default function EvidencijaForm(props) {
   const handleChangeAlati = ({ target }) => {
     setEvidencija({ ...evidencija, id_alata: target.value });
     setIdAlata(target.value);
+    ucitajPozicije(id_partnera, parseInt(target.value));
+  };
+
+  function handleChangePozicije1({ target }) {
+    setEvidencija({ ...evidencija, id_pozicije1: target.value });
+    setIdPozicije1(target.value);
+  }
+  function handleChangePozicije2({ target }) {
+    setEvidencija({ ...evidencija, id_pozicije2: target.value });
+    setIdPozicije2(target.value);
+  }
+
+  const ucitajPozicije = (id_partnera, id_alata) => {
+    (async () => {
+      var RegleriModel = {
+        id_partnera: id_partnera,
+        id_alata: id_alata,
+      };
+      var responsePozicije = await httpost("vrati_pozicije", RegleriModel);
+      if (responsePozicije.data !== null) {
+        setPozicije(responsePozicije.data);
+        setIdPozicije1(0);
+        setIdPozicije2(0);
+      }
+    })();
   };
 
   function handleSave(e) {
@@ -130,6 +185,9 @@ export default function EvidencijaForm(props) {
           nereseni_problemi: "",
           dodatne_aktivnosti: "",
           status: 2,
+          id_pozicije1: id_pozicije1,
+          id_pozicije2: id_pozicije2,
+          komentar_predlozi: "",
         };
         var response = await httpost("iud_evidencije_ucinka", RegleriModel);
         if (response.data === true) {
@@ -182,6 +240,9 @@ export default function EvidencijaForm(props) {
           nereseni_problemi: "",
           dodatne_aktivnosti: "",
           status: 1,
+          id_pozicije1: id_pozicije1,
+          id_pozicije2: id_pozicije2,
+          komentar_predlozi: "",
         };
         var response = await httpost("iud_evidencije_ucinka", RegleriModel);
         if (response.data === true) {
@@ -210,6 +271,23 @@ export default function EvidencijaForm(props) {
         ) : null}
       </label>
       <div className="form-group">
+        <label>Datum:</label>
+        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+          <KeyboardDatePicker
+            className="form-control"
+            margin="normal"
+            id="date-picker-dialog"
+            format="dd/MM/yyyy"
+            value={evidencija.datum}
+            onChange={handleChangeDatum}
+            KeyboardButtonProps={{
+              "aria-label": "change date",
+            }}
+            style={{ marginTop: "-6px" }}
+          />
+        </MuiPickersUtilsProvider>
+        <label>Smena:</label>
+        <Smena onChange={handleChange} value={evidencija.smena} /> 
         <label>Mašina:</label>
         <Masine
           masine={masine}
@@ -228,6 +306,22 @@ export default function EvidencijaForm(props) {
           alat={evidencija.id_alata}
           onChange={handleChangeAlati}
         />
+        {props.location.state === 3 || props.location.state.vrsta === 3 ? (
+          <>
+            <label>Pozicija 1:</label>
+            <Pozicija1
+              pozicije={pozicije}
+              pozicija={evidencija.id_pozicije1}
+              onChange={handleChangePozicije1}
+            />
+            <label>Pozicija 2:</label>
+            <Pozicija2
+              pozicije={pozicije}
+              pozicija={evidencija.id_pozicije2}
+              onChange={handleChangePozicije2}
+            />
+          </>
+        ) : null}
         {props.location.state === 1 || props.location.state.vrsta === 1 ? (
           <>
              <label>Pripremno vreme:</label>
@@ -268,23 +362,6 @@ export default function EvidencijaForm(props) {
             />
           </>
         ) : null}
-        <label>Smena:</label>
-        <Smena onChange={handleChange} value={evidencija.smena} /> 
-        <label>Datum:</label>
-        <MuiPickersUtilsProvider utils={DateFnsUtils}>
-          <KeyboardDatePicker
-            className="form-control"
-            margin="normal"
-            id="date-picker-dialog"
-            format="dd/MM/yyyy"
-            value={evidencija.datum}
-            onChange={handleChangeDatum}
-            KeyboardButtonProps={{
-              "aria-label": "change date",
-            }}
-            style={{ marginTop: "-6px" }}
-          />
-        </MuiPickersUtilsProvider>
         <label>Komentar:</label>
         <div className="field">
           <textarea

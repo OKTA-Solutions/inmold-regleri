@@ -216,6 +216,9 @@ const RegleriList = (props) => {
             reseni_problemi: "",
             nereseni_problemi: "",
             dodatne_aktivnosti: "",
+            id_pozicije1: 0,
+            id_pozicije2: 0,
+            komentar_predlozi: "",
             status: 3,
           };
           var response = await httpost("iud_evidencije_ucinka", RegleriModel);
@@ -659,6 +662,12 @@ const RegleriList = (props) => {
                                   {item.dodatne_aktivnosti.length > 29
                                     ? "..."
                                     : null}
+                                  <br />
+                                  <b>KP:</b>{" "}
+                                  {item.komentar_predlozi.substring(0, 29)}
+                                  {item.komentar_predlozi.length > 29
+                                    ? "..."
+                                    : null}
                                 </Typography>
                               </>
                             }
@@ -705,6 +714,19 @@ const RegleriList = (props) => {
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
             <p>
+              <b>Datum: </b> {popupPodaci.datum_prikaz}
+            </p>
+            <p>
+              <b>Smena: </b>{" "}
+              {popupPodaci.smena === "1"
+                ? "Prva smena"
+                : popupPodaci.smena === "2"
+                ? "Druga smena"
+                : popupPodaci.smena === "3"
+                ? "Treća smena"
+                : null}
+            </p>
+            <p>
               <b>Mašina: </b> {popupPodaci.masina_izmena}
             </p>
             <p>
@@ -723,14 +745,7 @@ const RegleriList = (props) => {
               <b>Zastoj: </b> {popupPodaci.zastoj_izmena}
             </p>
             <p>
-              <b>Smena: </b>{" "}
-              {popupPodaci.smena === "1"
-                ? "Prva smena"
-                : popupPodaci.smena === "2"
-                ? "Druga smena"
-                : popupPodaci.smena === "3"
-                ? "Treća smena"
-                : null}
+              <b>Trajanje: </b> {popupPodaci.trajanje} minuta
             </p>
             <p>
               <b>Pročišćavanje agregata: </b>{" "}
@@ -741,12 +756,6 @@ const RegleriList = (props) => {
             </p>
             <p>
               <b>Pogače: </b> {popupPodaci.pogace}
-            </p>
-            <p>
-              <b>Trajanje: </b> {popupPodaci.trajanje} minuta
-            </p>
-            <p>
-              <b>Datum: </b> {popupPodaci.datum_prikaz}
             </p>
             <p>
               <b>Komentar: </b> {popupPodaci.opis}
@@ -779,6 +788,19 @@ const RegleriList = (props) => {
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
+            <p>
+              <b>Datum: </b> {popupEvPodaci.datum_prikaz}
+            </p>
+            <p>
+              <b>Smena: </b>{" "}
+              {popupEvPodaci.smena === "1"
+                ? "Prva smena"
+                : popupEvPodaci.smena === "2"
+                ? "Druga smena"
+                : popupEvPodaci.smena === "3"
+                ? "Treća smena"
+                : null}
+            </p>
             {popupEvPodaci.vrsta !== 4 ? (
               <>
                 <p>
@@ -788,6 +810,16 @@ const RegleriList = (props) => {
                 <p>
                   <b>Alat: </b> {popupEvPodaci.alat} -{" "}
                   {popupEvPodaci.naziv_alata}
+                </p>
+              </>
+            ) : null}
+            {popupEvPodaci.vrsta === 3 ? (
+              <>
+                <p>
+                  <b>Pozicija 1: </b> {popupEvPodaci.poz1_izmena}
+                </p>
+                <p>
+                  <b>Pozicija 2: </b> {popupEvPodaci.poz2_izmena}
                 </p>
               </>
             ) : null}
@@ -815,21 +847,12 @@ const RegleriList = (props) => {
                 <p>
                   <b>Dodatne aktivnosti: </b> {popupEvPodaci.dodatne_aktivnosti}
                 </p>
+                <p>
+                  <b>Komentar: </b> {popupEvPodaci.komentar_predlozi}
+                </p>
               </>
             ) : null}
-            <p>
-              <b>Smena: </b>{" "}
-              {popupEvPodaci.smena === "1"
-                ? "Prva smena"
-                : popupEvPodaci.smena === "2"
-                ? "Druga smena"
-                : popupEvPodaci.smena === "3"
-                ? "Treća smena"
-                : null}
-            </p>
-            <p>
-              <b>Datum: </b> {popupEvPodaci.datum_prikaz}
-            </p>
+
             {popupEvPodaci.vrsta !== 4 ? (
               <p>
                 <b>Komentar: </b> {popupEvPodaci.opis}

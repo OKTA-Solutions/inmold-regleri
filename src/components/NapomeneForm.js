@@ -55,7 +55,12 @@ export default function NapomeneForm(props) {
           dodatne_aktivnosti: isUndefined(napomene.dodatne_aktivnosti)
             ? ""
             : napomene.dodatne_aktivnosti,
+          komentar_predlozi: isUndefined(napomene.komentar_predlozi)
+            ? ""
+            : napomene.komentar_predlozi,
           status: 2,
+          id_pozicije1: 0,
+          id_pozicije2: 0,
         };
         debugger;
         var response = await httpost("iud_evidencije_ucinka", RegleriModel);
@@ -88,7 +93,12 @@ export default function NapomeneForm(props) {
           dodatne_aktivnosti: isUndefined(napomene.dodatne_aktivnosti)
             ? ""
             : napomene.dodatne_aktivnosti,
+          komentar_predlozi: isUndefined(napomene.komentar_predlozi)
+            ? ""
+            : napomene.komentar_predlozi,
           status: 1,
+          id_pozicije1: 0,
+          id_pozicije2: 0,
         };
         debugger;
         var response = await httpost("iud_evidencije_ucinka", RegleriModel);
@@ -109,7 +119,26 @@ export default function NapomeneForm(props) {
         <b>Napomene</b>
       </label>
       <div className="form-group">
-        <label>Rešeni problemi:</label>
+        <label>Datum:</label>
+        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+          <KeyboardDatePicker
+            className="form-control"
+            margin="normal"
+            id="date-picker-dialog"
+            format="dd/MM/yyyy"
+            value={napomene.datum}
+            onChange={handleChangeDatum}
+            KeyboardButtonProps={{
+              "aria-label": "change date",
+            }}
+            style={{ marginTop: "-6px" }}
+          />
+        </MuiPickersUtilsProvider>
+        <label>Smena:</label>
+        <Smena onChange={handleChange} value={napomene.smena} /> 
+        <label style={{ marginTop: "5px" }}>
+          Rešeni problemi - Uzrok problema:
+        </label>
         <div className="field">
           <textarea
             id="reseni_problemi"
@@ -121,7 +150,7 @@ export default function NapomeneForm(props) {
             onChange={handleChange}
           />
         </div>
-        <label>Nerešeni problemi:</label>
+        <label>Nerešeni problemi - Uzrok problema:</label>
         <div className="field">
           <textarea
             id="nereseni_problemi"
@@ -145,26 +174,21 @@ export default function NapomeneForm(props) {
             onChange={handleChange}
           />
         </div>
-        <label>Smena:</label>
-        <Smena onChange={handleChange} value={napomene.smena} /> 
-        <label>Datum:</label>
-        <MuiPickersUtilsProvider utils={DateFnsUtils}>
-          <KeyboardDatePicker
+        <label>Komentar - predlozi:</label>
+        <div className="field">
+          <textarea
+            id="komentar_predlozi"
+            type="text"
             className="form-control"
-            margin="normal"
-            id="date-picker-dialog"
-            format="dd/MM/yyyy"
-            value={napomene.datum}
-            onChange={handleChangeDatum}
-            KeyboardButtonProps={{
-              "aria-label": "change date",
-            }}
-            style={{ marginTop: "-6px" }}
+            name="komentar_predlozi"
+            rows="3"
+            value={napomene.komentar_predlozi}
+            onChange={handleChange}
           />
-        </MuiPickersUtilsProvider>
+        </div>
       </div>
-      <br />
-      <div>
+
+      <div style={{ marginBottom: "10px" }}>
         <Fab
           variant="extended"
           type="submit"
