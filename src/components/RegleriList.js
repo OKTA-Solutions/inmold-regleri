@@ -823,7 +823,7 @@ const RegleriList = (props) => {
                 </p>
               </>
             ) : null}
-            {popupEvPodaci.vrsta === 1 ? (
+            {/* {popupEvPodaci.vrsta === 1 ? (
               <p>
                 <b>Pripremno vreme: </b> {popupEvPodaci.pripremno_vreme} minuta
               </p>
@@ -835,7 +835,7 @@ const RegleriList = (props) => {
               <p>
                 <b>Pripremno vreme: </b> {popupEvPodaci.pripremno_vreme} minuta
               </p>
-            ) : null}
+            ) : null} */}
             {popupEvPodaci.vrsta === 4 ? (
               <>
                 <p>

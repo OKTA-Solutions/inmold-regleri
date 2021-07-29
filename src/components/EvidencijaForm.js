@@ -153,14 +153,14 @@ export default function EvidencijaForm(props) {
     e.preventDefault();
     if (evidencija.id) {
       (async () => {
-        if (parseInt(evidencija.pripremno_vreme) > 480) {
-          alert("Pripremno vreme ne može biti veće od 480 minuta.");
-          return;
-        }
-        if (parseInt(evidencija.zavrsno_vreme) > 480) {
-          alert("Završno vreme ne može biti veće od 480 minuta.");
-          return;
-        }
+        // if (parseInt(evidencija.pripremno_vreme) > 480) {
+        //   alert("Pripremno vreme ne može biti veće od 480 minuta.");
+        //   return;
+        // }
+        // if (parseInt(evidencija.zavrsno_vreme) > 480) {
+        //   alert("Završno vreme ne može biti veće od 480 minuta.");
+        //   return;
+        // }
         debugger;
         var RegleriModel = {
           id: evidencija.id,
@@ -172,12 +172,8 @@ export default function EvidencijaForm(props) {
             ? 0
             : parseInt(evidencija.id_partnera),
           id_alata: id_alata,
-          pripremno_vreme: isNaN(parseInt(evidencija.pripremno_vreme))
-            ? 0
-            : evidencija.pripremno_vreme,
-          zavrsno_vreme: isNaN(parseInt(evidencija.zavrsno_vreme))
-            ? 0
-            : evidencija.zavrsno_vreme,
+          pripremno_vreme: 0,
+          zavrsno_vreme: 0,
           smena: isUndefined(evidencija.smena) ? "1" : evidencija.smena,
           datum: formatDate(evidencija.datum),
           opis: isUndefined(evidencija.opis) ? "" : evidencija.opis,
@@ -209,14 +205,14 @@ export default function EvidencijaForm(props) {
           alert("Odaberite alat.");
           return;
         }
-        if (parseInt(evidencija.pripremno_vreme) > 480) {
-          alert("Pripremno vreme ne može biti veće od 480 minuta.");
-          return;
-        }
-        if (parseInt(evidencija.zavrsno_vreme) > 480) {
-          alert("Završno vreme ne može biti veće od 480 minuta.");
-          return;
-        }
+        // if (parseInt(evidencija.pripremno_vreme) > 480) {
+        //   alert("Pripremno vreme ne može biti veće od 480 minuta.");
+        //   return;
+        // }
+        // if (parseInt(evidencija.zavrsno_vreme) > 480) {
+        //   alert("Završno vreme ne može biti veće od 480 minuta.");
+        //   return;
+        // }
         var RegleriModel = {
           id: 0,
           vrsta: props.location.state,
@@ -227,12 +223,8 @@ export default function EvidencijaForm(props) {
             ? 0
             : parseInt(evidencija.id_partnera),
           id_alata: id_alata,
-          pripremno_vreme: isNaN(parseInt(evidencija.pripremno_vreme))
-            ? 0
-            : evidencija.pripremno_vreme,
-          zavrsno_vreme: isNaN(parseInt(evidencija.zavrsno_vreme))
-            ? 0
-            : evidencija.zavrsno_vreme,
+          pripremno_vreme: 0,
+          zavrsno_vreme: 0,
           smena: isUndefined(evidencija.smena) ? "1" : evidencija.smena,
           datum: formatDate(evidencija.datum),
           opis: isUndefined(evidencija.opis) ? "" : evidencija.opis,
@@ -322,7 +314,7 @@ export default function EvidencijaForm(props) {
             />
           </>
         ) : null}
-        {props.location.state === 1 || props.location.state.vrsta === 1 ? (
+        {/* {props.location.state === 1 || props.location.state.vrsta === 1 ? (
           <>
              <label>Pripremno vreme:</label>
             <input
@@ -361,7 +353,7 @@ export default function EvidencijaForm(props) {
               onChange={handleChange}
             />
           </>
-        ) : null}
+        ) : null} */}
         <label>Komentar:</label>
         <div className="field">
           <textarea
