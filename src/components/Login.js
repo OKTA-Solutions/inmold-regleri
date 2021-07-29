@@ -3,6 +3,7 @@ import { login_auth } from "../api/httpHelper";
 import cookie from "react-cookies";
 import Backdrop from "@material-ui/core/Backdrop";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import logo from "../images/okta-logo.png";
 
 const Login = (props) => {
   const [showingAlert, setShowingAlert] = useState(false);
@@ -137,6 +138,24 @@ const Login = (props) => {
           <strong>Greška:</strong> Lozinka nije uneta.
         </div>
       </form>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          position: "fixed",
+          width: "90%",
+          bottom: 0,
+        }}
+      >
+        <p>
+          <span>
+            <img src={logo} alt="okta logo" width="30px" height="30px" />
+            &nbsp; &copy; {1900 + new Date().getYear()}{" "}
+            <label>Okta Solutions</label>
+            &nbsp;| Inmold
+          </span>
+        </p>
+      </div>
     </div>
   );
 };
