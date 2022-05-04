@@ -9,6 +9,7 @@ function Smena(props) {
         name="smena"
         value={props.value}
         onChange={props.onChange}
+        disabled={props.disabled}
       >
         <option value="1">Prva smena</option>
         <option value="2">Druga smena</option>

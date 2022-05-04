@@ -9,6 +9,7 @@ export default function Pozicija1(props) {
         name="pozicija1"
         onChange={props.onChange}
         value={props.pozicija}
+        disabled={props.disabled}
       >
         <option selected value={0}></option>
         {props.pozicije.map((pozicija) => {

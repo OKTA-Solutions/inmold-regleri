@@ -9,6 +9,7 @@ export default function Kupci(props) {
         name="kupci"
         onChange={props.onChange}
         value={props.kupac}
+        disabled={props.disabled}
       >
         {props.kupci.map((kupac) => {
           return (

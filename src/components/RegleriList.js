@@ -268,6 +268,7 @@ const RegleriList = (props) => {
   }
 
   function handeIzmeniEvidenciju(e, items) {
+    debugger;
     e.preventDefault();
     props.history.push({
       pathname: "/evidencijaform",

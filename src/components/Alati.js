@@ -9,6 +9,7 @@ export default function Alati(props) {
         name="alati"
         onChange={props.onChange}
         value={props.alat}
+        disabled={props.disabled}
       >
         {props.alati.map((alat) => {
           return (

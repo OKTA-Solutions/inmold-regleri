@@ -12,14 +12,23 @@ import {
 } from "@material-ui/pickers";
 import { Link } from "react-router-dom";
 import Fab from "@material-ui/core/Fab";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import Button from "@material-ui/core/Button";
 
 export default function NapomeneForm(props) {
   const [napomene, setNapomene] = useState({ datum: new Date() });
+  const [opened, setOpened] = useState(false);
+  const [disabled, setDisabled] = useState(false);
 
   useEffect(() => {
     const params = props.location.state;
     if (params !== 4 && params !== undefined) {
       setNapomene(params);
+      handleProveraId(params);
     }
   }, [props.location.state]);
 
@@ -113,6 +122,40 @@ export default function NapomeneForm(props) {
     }
   }
 
+  function handleKopirajPopUp() {
+    setOpened(true);
+  }
+  function handleProveraId(params) {
+    console.log(params);
+    if (params.id_korisnika !== +localStorage.id_korisnika) {
+      setDisabled(true);
+    }
+  }
+  function handleClose() {
+    setOpened(false);
+  }
+  function handleKopiraj() {
+    (async () => {
+      let RegleriModel = {
+        id_korisnika: +localStorage.id_korisnika,
+        id_evidencije: +napomene.id,
+      };
+      let response = await httpost("evidencija_ucinka_copy", RegleriModel);
+      if (response.data !== 0) {
+        let obj = {
+          ...napomene,
+          id: response.data,
+        };
+        setNapomene(obj);
+        setOpened(false);
+        setDisabled(false);
+        toast.success("Uspešno kopiran zapis.");
+      } else {
+        alert("Greška prilikom kopiranja zapisa.");
+      }
+    })();
+  }
+
   return (
     <form>
       <label>
@@ -132,10 +175,16 @@ export default function NapomeneForm(props) {
               "aria-label": "change date",
             }}
             style={{ marginTop: "-6px" }}
+            disabled={disabled}
           />
         </MuiPickersUtilsProvider>
         <label>Smena:</label>
-        <Smena onChange={handleChange} value={napomene.smena} /> 
+        <Smena
+          onChange={handleChange}
+          value={napomene.smena}
+          disabled={disabled}
+        />
+         
         <label style={{ marginTop: "5px" }}>
           Rešeni problemi - Uzrok problema:
         </label>
@@ -148,6 +197,7 @@ export default function NapomeneForm(props) {
             rows="3"
             value={napomene.reseni_problemi}
             onChange={handleChange}
+            disabled={disabled}
           />
         </div>
         <label>Nerešeni problemi - Uzrok problema:</label>
@@ -160,6 +210,7 @@ export default function NapomeneForm(props) {
             rows="3"
             value={napomene.nereseni_problemi}
             onChange={handleChange}
+            disabled={disabled}
           />
         </div>
         <label>Dodatne aktivnosti:</label>
@@ -172,6 +223,7 @@ export default function NapomeneForm(props) {
             rows="3"
             value={napomene.dodatne_aktivnosti}
             onChange={handleChange}
+            disabled={disabled}
           />
         </div>
         <label>Komentar - predlozi:</label>
@@ -184,6 +236,7 @@ export default function NapomeneForm(props) {
             rows="3"
             value={napomene.komentar_predlozi}
             onChange={handleChange}
+            disabled={disabled}
           />
         </div>
       </div>
@@ -203,6 +256,7 @@ export default function NapomeneForm(props) {
           }}
           size="small"
           onClick={handleSave}
+          disabled={disabled}
         >
           SAČUVAJ
         </Fab>
@@ -218,7 +272,47 @@ export default function NapomeneForm(props) {
         >
           <Link to="reglerilist">ODUSTANI</Link>
         </Fab>
+        {napomene.id !== 0 && (
+          <Fab
+            variant="extended"
+            style={{
+              width: "100%",
+              background: "lightsalmon",
+              color: "#fff",
+              fontSize: "inherit",
+              fontWeight: 500,
+              letterSpacing: "3px",
+              marginBottom: "5px",
+              marginTop: "30px",
+            }}
+            size="small"
+            onClick={handleKopirajPopUp}
+          >
+            KOPIRAJ
+          </Fab>
+        )}
       </div>
+      <Dialog
+        open={opened}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">Upozorenje!</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Da li ste sigurni da želite da kopirate izabrani zapis?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button color="primary" onClick={handleClose}>
+            Odustani
+          </Button>
+          <Button color="primary" autoFocus onClick={handleKopiraj}>
+            Potvrdi
+          </Button>
+        </DialogActions>
+      </Dialog>
     </form>
   );
 }

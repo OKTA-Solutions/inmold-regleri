@@ -19,22 +19,35 @@ import { Link } from "react-router-dom";
 import Fab from "@material-ui/core/Fab";
 import Backdrop from "@material-ui/core/Backdrop";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import Button from "@material-ui/core/Button";
 
 export default function EvidencijaForm(props) {
   const [evidencija, setEvidencija] = useState({
     datum: new Date(),
+    id: 0,
     id_masine: 0,
     id_alata: 0,
     id_partnera: 0,
     id_pozicije1: 0,
     id_pozicije2: 0,
+    id_korisnika: 0,
   });
+
+  console.log(evidencija);
   const [masine, setMasine] = useState([]);
   const [kupci, setKupci] = useState([]);
   const [alati, setAlati] = useState([]);
   const [loading, setLoading] = useState(false);
   const [id_alata, setIdAlata] = useState(0);
   const [id_partnera, setIdPartnera] = useState(0);
+  const [disabled, setDisabled] = useState(false);
+  const [opened, setOpened] = useState(false);
+
   const [pozicije, setPozicije] = useState([
     {
       id_pozicije1: 0,
@@ -58,13 +71,13 @@ export default function EvidencijaForm(props) {
       setLoading(false);
     })();
     const params = props.location.state;
-    debugger;
     if (params !== 1 && params !== 2 && params !== 3 && params !== undefined) {
       (async () => {
         var RegleriModel = {
           id_partnera: parseInt(params.id_partnera),
         };
         var responseAlati = await httpost("vrati_alate_cmb", RegleriModel);
+
         if (responseAlati.data !== null) {
           setAlati(responseAlati.data);
         }
@@ -78,10 +91,13 @@ export default function EvidencijaForm(props) {
         }
       })();
       setEvidencija(params);
+
       setIdPartnera(params.id_partnera);
       setIdAlata(params.id_alata);
       setIdPozicije1(params.id_pozicije1);
       setIdPozicije2(params.id_pozicije2);
+
+      handleProveraId(params);
     }
   }, [props.location.state]);
 
@@ -115,10 +131,14 @@ export default function EvidencijaForm(props) {
   const handleChangeDatum = (date) => {
     setEvidencija({ ...evidencija, datum: date });
   };
-
+  //prosirio sa id_korisnika (dodao )
   const handleChangeMasine = ({ target }) => {
-    setEvidencija({ ...evidencija, id_masine: target.value });
+    setEvidencija({
+      ...evidencija,
+      id_masine: target.value,
+    });
   };
+
   const handleChangeAlati = ({ target }) => {
     setEvidencija({ ...evidencija, id_alata: target.value });
     setIdAlata(target.value);
@@ -149,6 +169,16 @@ export default function EvidencijaForm(props) {
     })();
   };
 
+  function handleProveraId(params) {
+    if (params.id_korisnika !== +localStorage.id_korisnika) {
+      setDisabled(true);
+    }
+  }
+
+  function handleKopirajPopUp() {
+    setOpened(true);
+  }
+
   function handleSave(e) {
     e.preventDefault();
     if (evidencija.id) {
@@ -161,7 +191,7 @@ export default function EvidencijaForm(props) {
         //   alert("Završno vreme ne može biti veće od 480 minuta.");
         //   return;
         // }
-        debugger;
+
         var RegleriModel = {
           id: evidencija.id,
           vrsta: props.location.state.vrsta,
@@ -196,7 +226,6 @@ export default function EvidencijaForm(props) {
       })();
     } else {
       (async () => {
-        debugger;
         if (evidencija.id_masine === undefined) {
           alert("Odaberite mašinu.");
           return;
@@ -247,6 +276,30 @@ export default function EvidencijaForm(props) {
       })();
     }
   }
+  function handleClose() {
+    setOpened(false);
+  }
+  function handleKopiraj() {
+    (async () => {
+      let RegleriModel = {
+        id_korisnika: +localStorage.id_korisnika,
+        id_evidencije: +evidencija.id,
+      };
+      let response = await httpost("evidencija_ucinka_copy", RegleriModel);
+      if (response.data !== 0) {
+        let obj = {
+          ...evidencija,
+          id: response.data,
+        };
+        setEvidencija(obj);
+        setOpened(false);
+        setDisabled(false);
+        toast.success("Uspešno kopiran zapis.");
+      } else {
+        alert("Greška prilikom kopiranja zapisa.");
+      }
+    })();
+  }
 
   return (
     <form>
@@ -276,27 +329,35 @@ export default function EvidencijaForm(props) {
               "aria-label": "change date",
             }}
             style={{ marginTop: "-6px" }}
+            disabled={disabled}
           />
         </MuiPickersUtilsProvider>
         <label>Smena:</label>
-        <Smena onChange={handleChange} value={evidencija.smena} /> 
-        <label>Mašina:</label>
+        <Smena
+          onChange={handleChange}
+          value={evidencija.smena}
+          disabled={disabled}
+        />
+         <label>Mašina:</label>
         <Masine
           masine={masine}
           masina={evidencija.id_masine}
           onChange={handleChangeMasine}
+          disabled={disabled}
         />
         <label>Kupac:</label>
         <Kupci
           kupci={kupci}
           kupac={evidencija.id_partnera}
           onChange={handleChangeKupac}
+          disabled={disabled}
         />
         <label>Alat:</label>
         <Alati
           alati={alati}
           alat={evidencija.id_alata}
           onChange={handleChangeAlati}
+          disabled={disabled}
         />
         {props.location.state === 3 || props.location.state.vrsta === 3 ? (
           <>
@@ -305,12 +366,14 @@ export default function EvidencijaForm(props) {
               pozicije={pozicije}
               pozicija={evidencija.id_pozicije1}
               onChange={handleChangePozicije1}
+              disabled={disabled}
             />
             <label>Pozicija 2:</label>
             <Pozicija2
               pozicije={pozicije}
               pozicija={evidencija.id_pozicije2}
               onChange={handleChangePozicije2}
+              disabled={disabled}
             />
           </>
         ) : null}
@@ -363,6 +426,7 @@ export default function EvidencijaForm(props) {
             name="opis"
             value={evidencija.opis}
             onChange={handleChange}
+            disabled={disabled}
           />
         </div>
         <br />
@@ -381,9 +445,11 @@ export default function EvidencijaForm(props) {
             }}
             size="small"
             onClick={handleSave}
+            disabled={disabled}
           >
             SAČUVAJ
           </Fab>
+
           <Fab
             variant="extended"
             style={{
@@ -396,8 +462,48 @@ export default function EvidencijaForm(props) {
           >
             <Link to="reglerilist">ODUSTANI</Link>
           </Fab>
+          {evidencija.id !== 0 && (
+            <Fab
+              variant="extended"
+              style={{
+                width: "100%",
+                background: "lightsalmon",
+                color: "#fff",
+                fontSize: "inherit",
+                fontWeight: 500,
+                letterSpacing: "3px",
+                marginBottom: "5px",
+                marginTop: "30px",
+              }}
+              size="small"
+              onClick={handleKopirajPopUp}
+            >
+              KOPIRAJ
+            </Fab>
+          )}
         </div>
       </div>
+      <Dialog
+        open={opened}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">Upozorenje!</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Da li ste sigurni da želite da kopirate izabrani zapis?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button color="primary" onClick={handleClose}>
+            Odustani
+          </Button>
+          <Button color="primary" autoFocus onClick={handleKopiraj}>
+            Potvrdi
+          </Button>
+        </DialogActions>
+      </Dialog>
     </form>
   );
 }

@@ -42,9 +42,11 @@ const Login = (props) => {
         Username: loginData.username,
         Password: loginData.password,
         id_firme: 6,
+        id_korisnika: loginData.id_korisnika,
       };
       var response = await login_auth(UserModel);
       if (response.data.token !== "") {
+        localStorage.setItem("id_korisnika", response.data.id_korisnika);
         const getAccessToken = () => cookie.load("jwtToken");
         if (!!getAccessToken()) {
           setLoading(false);

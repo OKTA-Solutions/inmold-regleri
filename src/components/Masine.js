@@ -9,6 +9,7 @@ export default function Masine(props) {
         name="masine"
         onChange={props.onChange}
         value={props.masina}
+        disabled={props.disabled}
       >
         {props.masine.map((masina) => {
           return (
