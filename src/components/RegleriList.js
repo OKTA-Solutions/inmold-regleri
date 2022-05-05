@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: theme.typography.fontWeightRegular,
   },
 }));
-
+console.log(localStorage.id_korisnika);
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -95,7 +95,7 @@ const RegleriList = (props) => {
   const [popupEvPodaci, setPodaciEvidencija] = useState({});
   const [tabValue, setTabValue] = useState(0);
   const [loading, setLoading] = useState(false);
-
+  console.log(evidencija);
   useEffect(() => {
     setLoading(true);
     (async () => {
@@ -356,6 +356,7 @@ const RegleriList = (props) => {
                     >
                       <EditIcon style={{ color: "#fe661d" }} />
                     </IconButton>
+
                     <IconButton
                       edge="end"
                       aria-label="delete"
@@ -424,6 +425,7 @@ const RegleriList = (props) => {
                               </>
                             }
                           />
+
                           <ListItemSecondaryAction>
                             <IconButton
                               edge="end"
@@ -433,15 +435,18 @@ const RegleriList = (props) => {
                             >
                               <EditIcon style={{ color: "#fe661d" }} />
                             </IconButton>
-                            <IconButton
-                              edge="end"
-                              aria-label="delete"
-                              onClick={(e) =>
-                                handleDeleteEvidencija(e, item.id)
-                              }
-                            >
-                              <DeleteIcon style={{ color: "#e4020f" }} />
-                            </IconButton>
+                            {item.id_korisnika ===
+                              +localStorage.id_korisnika && (
+                              <IconButton
+                                edge="end"
+                                aria-label="delete"
+                                onClick={(e) =>
+                                  handleDeleteEvidencija(e, item.id)
+                                }
+                              >
+                                <DeleteIcon style={{ color: "#e4020f" }} />
+                              </IconButton>
+                            )}
                           </ListItemSecondaryAction>
                         </ListItem>
                         <Divider />
@@ -512,15 +517,18 @@ const RegleriList = (props) => {
                             >
                               <EditIcon style={{ color: "#fe661d" }} />
                             </IconButton>
-                            <IconButton
-                              edge="end"
-                              aria-label="delete"
-                              onClick={(e) =>
-                                handleDeleteEvidencija(e, item.id)
-                              }
-                            >
-                              <DeleteIcon style={{ color: "#e4020f" }} />
-                            </IconButton>
+                            {item.id_korisnika ===
+                              +localStorage.id_korisnika && (
+                              <IconButton
+                                edge="end"
+                                aria-label="delete"
+                                onClick={(e) =>
+                                  handleDeleteEvidencija(e, item.id)
+                                }
+                              >
+                                <DeleteIcon style={{ color: "#e4020f" }} />
+                              </IconButton>
+                            )}
                           </ListItemSecondaryAction>
                         </ListItem>
                         <Divider />
@@ -593,15 +601,18 @@ const RegleriList = (props) => {
                             >
                               <EditIcon style={{ color: "#fe661d" }} />
                             </IconButton>
-                            <IconButton
-                              edge="end"
-                              aria-label="delete"
-                              onClick={(e) =>
-                                handleDeleteEvidencija(e, item.id)
-                              }
-                            >
-                              <DeleteIcon style={{ color: "#e4020f" }} />
-                            </IconButton>
+                            {item.id_korisnika ===
+                              +localStorage.id_korisnika && (
+                              <IconButton
+                                edge="end"
+                                aria-label="delete"
+                                onClick={(e) =>
+                                  handleDeleteEvidencija(e, item.id)
+                                }
+                              >
+                                <DeleteIcon style={{ color: "#e4020f" }} />
+                              </IconButton>
+                            )}
                           </ListItemSecondaryAction>
                         </ListItem>
                         <Divider />
@@ -682,15 +693,18 @@ const RegleriList = (props) => {
                             >
                               <EditIcon style={{ color: "#fe661d" }} />
                             </IconButton>
-                            <IconButton
-                              edge="end"
-                              aria-label="delete"
-                              onClick={(e) =>
-                                handleDeleteEvidencija(e, item.id)
-                              }
-                            >
-                              <DeleteIcon style={{ color: "#e4020f" }} />
-                            </IconButton>
+                            {item.id_korisnika ===
+                              +localStorage.id_korisnika && (
+                              <IconButton
+                                edge="end"
+                                aria-label="delete"
+                                onClick={(e) =>
+                                  handleDeleteEvidencija(e, item.id)
+                                }
+                              >
+                                <DeleteIcon style={{ color: "#e4020f" }} />
+                              </IconButton>
+                            )}
                           </ListItemSecondaryAction>
                         </ListItem>
                         <Divider />
