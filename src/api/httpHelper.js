@@ -1,7 +1,7 @@
 import axios from "axios";
 import cookie from "react-cookies";
 
-var api = "https://localhost:44386/api/";
+var api = "http://localhost:61757/api/";
 //var api = "http://173.212.203.236/Inmold_Demo-API/api/";
 
 export async function httpget(controller) {

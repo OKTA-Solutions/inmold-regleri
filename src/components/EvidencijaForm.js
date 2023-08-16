@@ -36,6 +36,7 @@ export default function EvidencijaForm(props) {
     id_pozicije1: 0,
     id_pozicije2: 0,
     id_korisnika: 0,
+    utrosenoVreme: 0,
   });
 
   console.log(evidencija);
@@ -214,6 +215,7 @@ export default function EvidencijaForm(props) {
           id_pozicije1: id_pozicije1,
           id_pozicije2: id_pozicije2,
           komentar_predlozi: "",
+          utrosenoVreme: evidencija.utrosenoVreme,
         };
         var response = await httpost("iud_evidencije_ucinka", RegleriModel);
         if (response.data === true) {
@@ -374,6 +376,16 @@ export default function EvidencijaForm(props) {
               pozicija={evidencija.id_pozicije2}
               onChange={handleChangePozicije2}
               disabled={disabled}
+            />
+             <label>Pripremno vreme(min):</label>
+            <input
+              id="utroseno_vreme"
+              type="number"
+              className="form-control"
+              name="utrosenoVreme"
+              value={evidencija.utrosenoVreme}
+              placeholder="u minutima"
+              onChange={handleChange}
             />
           </>
         ) : null}

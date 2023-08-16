@@ -93,7 +93,7 @@ const RegleriList = (props) => {
   const [popupPodaci, setPodaci] = useState({});
   const [popupEvidencija, setPopupEvidencija] = useState(false);
   const [popupEvPodaci, setPodaciEvidencija] = useState({});
-  const [tabValue, setTabValue] = useState(0);
+  const [tabValue, setTabValue] = useState(1);
   const [loading, setLoading] = useState(false);
   console.log(evidencija);
   useEffect(() => {
@@ -302,7 +302,7 @@ const RegleriList = (props) => {
         aria-label="scrollable auto tabs example"
         style={{ color: "black" }}
       >
-        <Tab label="Zastoji" {...a11yProps(0)} style={{ width: "50%" }} />
+        {/* <Tab label="Zastoji" {...a11yProps(0)} style={{ width: "50%" }} /> */}
         <Tab
           label="Evidencija učinka"
           {...a11yProps(1)}
@@ -375,6 +375,7 @@ const RegleriList = (props) => {
           <AddIcon />
         </Fab>
       </TabPanel>
+      {/* =============================== EVIDENCIJA UCINKA =================================== */}
       <TabPanel value={tabValue} index={1}>
         <Accordion style={{ marginTop: "2px" }}>
           <AccordionSummary style={{ backgroundColor: "#ffa07a91" }}>
